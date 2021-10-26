@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const fetch = require('node-fetch');
 
-const authToken = `${process.env.GENIUS_TOKEN}`;
+const authToken = process.env.GENIUS_TOKEN;
 
 const path = require('path');
 const port = process.env.PORT || 3000;
@@ -25,7 +25,7 @@ app.get('/api/search', (req, res) => {
       const songs = data.response.hits.map((hit) => {
         const {
           song_art_image_thumbnail_url: songArt,
-          full_title: title,
+          title_with_featured: title,
           primary_artist: {name: artistName},
           id: id,
         } = hit.result;
