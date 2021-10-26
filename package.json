@@ -1,0 +1,23 @@
+{
+  "name": "lyweb",
+  "version": "1.0.0",
+  "description": "Web aplication to view lyrics",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alt-art/lyweb.git"
+  },
+  "author": "alt-art <pedromendescraft@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alt-art/lyweb/issues"
+  },
+  "homepage": "https://github.com/alt-art/lyweb#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
