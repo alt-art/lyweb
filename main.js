@@ -19,14 +19,21 @@ app.get('/api/search', (req, res) => {
     headers: {
       Authorization: `Bearer ${authToken}`,
     },
-  }).then(response => response.json()).then((data) => {
-    const songs = data.response.hits.map(hit => {
-      const { song_art_image_thumbnail_url: songArt, full_title: title, primary_artist: artistName } = hit.result;
-      return {songArt, title, artistName: artistName.name};
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      const songs = data.response.hits.map((hit) => {
+        const {
+          song_art_image_thumbnail_url: songArt,
+          full_title: title,
+          primary_artist: artistName,
+          id: id,
+        } = hit.result;
+        return { songArt, title, artistName: artistName.name, id };
+      });
+      res.header('Content-Type', 'application/json');
+      res.send(JSON.stringify(songs));
     });
-    res.header("Content-Type",'application/json');
-    res.send(JSON.stringify(songs));
-  });
 });
 
 app.listen(port, () => {
