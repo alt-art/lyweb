@@ -29,7 +29,7 @@ app.get('/api/search', (req, res) => {
           primary_artist: {name: artistName},
           id: id,
         } = hit.result;
-        return { songArt, title, artistName: artistName.name, id };
+        return { songArt, title, artistName, id };
       });
       res.header('Content-Type', 'application/json');
       res.send(JSON.stringify(songs));
