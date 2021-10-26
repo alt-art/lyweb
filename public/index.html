@@ -18,35 +18,14 @@
     <nav class="d-flex flex-row justify-content-center navbar navbar-light bg-light">
         <a class="navbar-brand">Lyweb</a>
         <form class="d-flex form-inline m-3">
-          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-dark m-2 my-sm-0" type="submit">Search</button>
+          <input class="form-control mr-sm-2" id="query" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-dark m-2 my-sm-0" id='btn-query' type="submit">Search</button>
         </form>
       </nav>
 
-      <div class="d-flex flex-row justify-content-center card-deck">
-        <div class="card">
-          <img class="card-img-top" src="template-album.png" alt="Card image cap">
-          <div class="card-body">
-            <h5 class="card-title">Ten</h5>
-            <p class="card-text"></p>
-  
-          </div>
-        </div>
-        <div class="card">
-          <img class="card-img-top" src="template-album-2.png" alt="Card image cap">
-          <div class="card-body">
-            <h5 class="card-title">Audioslave</h5>
-            <p class="card-text"></p>
-          </div>
-        </div>
-        <div class="card">
-          <img class="card-img-top" src="template-album-3.png" alt="Card image cap">
-          <div class="card-body">
-            <h5 class="card-title">Sgt Peppers Lonely Hearts Club Band</h5>
-            <p class="card-text"></p>
-          </div>
-        </div>
-      </div>
+    <main class="d-flex flex-row flex-wrap justify-content-center card-deck" id="container">
+      
+    </main>
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
       integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
@@ -57,5 +36,6 @@
       integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
       crossorigin="anonymous"
     ></script>
+    <script src="app.js"></script>
   </body>
 </html>
