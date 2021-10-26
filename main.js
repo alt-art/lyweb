@@ -38,7 +38,7 @@ app.get('/api/search', (req, res) => {
 
 app.get('/api/lyrics/:id', (req, res) => {
   const id = req.params.id;
-  fetch(`${URL}/songs/${id}?text_format=html`, {
+  fetch(`${URL}/songs/${id}?text_format=plain`, {
     headers: {
       Authorization: `Bearer ${authToken}`,
     },

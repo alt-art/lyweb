@@ -10,7 +10,7 @@ searchButton.addEventListener("click", (e) => {
     .then((response) => response.json())
     .then((data) =>
       data.forEach((song) => {
-        createCard(song.title, song.songArt, song.artistName);
+        createCard(song.id ,song.title, song.songArt, song.artistName);
       })
     );
 });
@@ -22,9 +22,11 @@ const createImgElement = (path) => {
   return img;
 };
 
-const createCard = (title, songArt, artistName) => {
+const createCard = (id, title, songArt, artistName) => {
+  const link = document.createElement("a");
   const firstDiv = document.createElement("div");
   firstDiv.className = "card";
+  link.href = `./song?id=${id}`;
   const songImg = createImgElement(songArt);
   const secondDiv = document.createElement("div");
   secondDiv.className = "card-body";
@@ -34,7 +36,8 @@ const createCard = (title, songArt, artistName) => {
   const nameArtist = document.createElement("p");
   nameArtist.innerText = artistName;
   nameArtist.className = "card-text";
-  secondDiv.appendChild(songTitle);
+  link.appendChild(songTitle);
+  secondDiv.appendChild(link);
   secondDiv.appendChild(nameArtist);
   firstDiv.appendChild(songImg);
   firstDiv.appendChild(secondDiv);
