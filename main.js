@@ -26,13 +26,30 @@ app.get('/api/search', (req, res) => {
         const {
           song_art_image_thumbnail_url: songArt,
           full_title: title,
-          primary_artist: artistName,
+          primary_artist: {name: artistName},
           id: id,
         } = hit.result;
         return { songArt, title, artistName: artistName.name, id };
       });
       res.header('Content-Type', 'application/json');
       res.send(JSON.stringify(songs));
+    });
+});
+
+app.get('/api/lyrics/:id', (req, res) => {
+  const id = req.params.id;
+  fetch(`${URL}/songs/${id}?text_format=html`, {
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      const {
+        song: { lyrics: lyrics },
+      } = data.response;
+      res.header('Content-Type', 'application/json');
+      res.send(JSON.stringify(lyrics));
     });
 });
 
