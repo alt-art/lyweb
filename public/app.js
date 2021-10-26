@@ -2,7 +2,8 @@ const getInputValue = document.querySelector("#query");
 const searchButton = document.querySelector("#btn-query");
 const getContainer = document.querySelector("#container");
 
-searchButton.addEventListener("click", () => {
+searchButton.addEventListener("click", (e) => {
+  e.preventDefault();
   getContainer.innerHTML = "";
   const song = getInputValue.value;
   fetch(`./api/search?q=${song}`)
