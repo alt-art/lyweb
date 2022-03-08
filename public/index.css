@@ -1,4 +1,76 @@
+@import url(default.css);
+
+input, .btn {
+  font-size: 18px;  
+}
+
+.btn {
+  text-transform: uppercase;
+  padding: 10px 15px;
+  border-radius: 3px;
+}
+.btn.active {
+  color: var(--theme-color);
+}
+
+.card-deck {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--card-width), auto));
+}
+
+.card .card-img {
+  object-fit: cover;
+  border-radius: 5px;
+}
+
 .card {
-    margin: 10px;
-    width: 20%;
+  margin: 5px;
+  padding: 10px 5px;
+  border-radius: 10px;
+}
+
+.card .card-body {
+  padding: 5px;
+  padding-bottom: 0;
+}
+
+.card, 
+.card .card-body {
+  text-align: center;
+}
+
+.card img {
+  object-fit: cover;
+  border-radius: 5px;
+  width: calc(var(--card-width) - 50px);
+  height: calc(var(--card-width) - 50px);
+}
+
+.card:hover {
+  background: rgba(0, 0, 0, .2);
+  cursor: pointer;
+}
+
+@media (max-width: 500px) {
+  form {
+      margin: 5px 0;
+    }
+  .headline-1 {
+    font-size: 32px;
+  }
+
+  .card .card-img {
+    width: calc(var(--card-width));
+    height: calc(var(--card-width));
+  }
+}
+
+@media (max-width: 300px) {
+  .headline-1 {
+    font-size: 22px;
+  }
+
+  form {
+    margin: 0;
+  }
 }
