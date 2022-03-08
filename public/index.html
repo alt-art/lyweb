@@ -19,21 +19,32 @@
         <div class="content">
           <div class="content">
             <div class="text-center">
-                <h1 id="headline" class="headline-1">Welcome, to <span class="text-primary">Lyweb</span>!</h1>
-                <span class="subtitle">Find lyrics of your favorites songs</span>
+              <h1 id="headline" class="headline-1">Welcome, to <span class="text-primary">Lyweb</span>!</h1>
+              <span class="subtitle">Find lyrics of your favorites songs</span>
             </div>
             <form>
-                <input id="query" type="search" placeholder="Search">
-                <button class="btn" id="btn-query" type="submit" data-action="search">
-                  <i class="material-icons">search</i>
-                </button>
+              <input id="query" type="search" placeholder="Search">
+              <input type="hidden" id="page" value="1" data-search="">
+              <button class="btn" type="submit" data-action="search">
+                <i class="material-icons">search</i>
+              </button>
             </form>
           </div>
         </div>
       </section>
 
       <article id="container" class="card-deck">
-          <!-- Card Deck -->
+        <!-- Card Deck -->
+      </article>
+
+      <article>
+        <div class="content">
+          <div class="content text-center">
+            <a class="btn btn-block view-more" data-action="view-more" style="display: none;">
+            <!-- View more '{search}' results ({page}) -->
+            </a>
+          </div>
+        </div>
       </article>
     </main>
 

@@ -1,11 +1,14 @@
 const app = {
 
   /**
-   * Interface components
+   * Interfaces components
    */
-  interface: {
+  GUI: {
     container: "#container",
-    search: "#query"
+    search: "#query",
+    page: "#page",
+    view_more: '.view-more',
+    label: ".subtitle"
   },
 
   actions: {
@@ -16,16 +19,56 @@ const app = {
      */
     search: e => {
       e.preventDefault();
-      app.interface.container.innerHTML = "";
-      const song = app.interface.search.value;
-      fetch(`./api/search?q=${song}`)
+      let song = app.GUI.search.value,
+          page = app.GUI.page.value;
+      
+      if(!app.setSearch(song)) return
+      app.GUI.label.innerText = "Searching.."
+      app.GUI.search.disabled = true
+
+      app.beforeSearch = app.GUI.search.value;
+      app.beforePage = app.GUI.page.value;
+      app.GUI.page.dataset.search = song
+
+      fetch(`./api/search?q=${song}&page=${page}`)
         .then((response) => response.json())
         .then((data) => {
-          app.interface.container.innerHTML = data
-            .map(song => app.createCard(song)).join('\n')
+          data.map(song => app.GUI.container.innerHTML += app.createCard(song))
+          app.GUI.search.disabled = false
+          app.GUI.label.innerText = "Select a song to see lyrics";
+          app.GUI.view_more.innerText = `View more '${song}' results (${parseInt(app.GUI.page.value) + 1})`
+          app.GUI.view_more.style.display = 'block';
         });
     },
 
+    /**
+     * Next page to view more results
+     * @param {PointerEvent} e event
+     */
+    view_more: e => {
+      app.GUI.page.value = parseInt(app.GUI.page.value) + 1;
+      app.GUI.search.value = app.GUI.page.dataset.search;
+      app.actions.search(app.e)
+    }
+
+  },
+
+  /**
+   * trait search (anti-duplicate)
+   * @param {string} song song search
+   * @returns 
+   */
+  setSearch(song) {
+    let page = app.GUI.page.value
+    if (app.beforeSearch == song && page == app.beforePage) return false
+    if (song == "" || app.beforeSearch != song) {
+      app.GUI.label.innerText = "Find lyrics of your favorites songs";
+      app.GUI.view_more.style.display = 'none';
+      app.GUI.container.innerHTML = "";
+      app.GUI.page.value = 1
+    }
+    if (song == "") return false
+    return true
   },
 
   /**
@@ -49,15 +92,20 @@ const app = {
    * Start Application
    */
   start() {
-    Object.entries(app.interface)
+    Object.entries(app.GUI)
       .forEach(([elem, query]) => {
-        app.interface[elem] = document.querySelector(query)
+        app.GUI[elem] = document.querySelector(query)
       })
     
     Array.from(document.querySelectorAll(".btn[data-action]"))
       .forEach(b => {
-        b.addEventListener("click", app.actions[b.dataset.action])
+        b.addEventListener("click", app.actions[b.dataset.action.replace('-', '_')])
       })
+    
+    app.beforeSearch = app.GUI.search.value;
+    app.beforePage = app.GUI.page.value;
+    // fake pointerEvent
+    app.e = {preventDefault: () => {}}
   }
 };
 

@@ -14,8 +14,10 @@ const URL = 'https://api.genius.com';
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/api/search', (req, res) => {
-  const query = req.query.q;
-  fetch(`${URL}/search?q=${query}`, {
+  const query = req.query.q,
+        page = req.query.page;
+
+  fetch(`${URL}/search?q=${query}&page=${page}`, {
     headers: {
       Authorization: `Bearer ${authToken}`,
     },
