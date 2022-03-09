@@ -77,7 +77,7 @@ button {
 }
 button:hover,
 button:focus {
-  background: rgba(0, 0, 0, .05);
+  background: rgba(0, 0, 0, .1);
   color: var(--theme-color);
 }
 
@@ -153,7 +153,7 @@ form {
   font-size: 30px;
 }
 .subtitle {
-  color: rgb(var(--dark-text-color));
+  color: rgba(var(--dark-text-color), .6);
   font-size: 1.45rem;
   font-weight: 200;
   line-height: 2;

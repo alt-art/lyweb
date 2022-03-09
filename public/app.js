@@ -1,3 +1,4 @@
+/** @constant {object} app Application */
 const app = {
 
   /** @var {object} e fake PointerEvent */
@@ -7,12 +8,14 @@ const app = {
   storage: {
     view_mode: "grid_mode",
     dark_mode: 0,
+    recents: "",
 
     /**
      * Set default values to localStorage
      */
     setDefault() {
       Object.entries(app.storage).forEach(([item, value]) => {
+        if (typeof value == 'function') return
         localStorage.getItem(item) == null
         if (localStorage.getItem(item) == null)
           localStorage.setItem(item, value)
@@ -37,10 +40,12 @@ const app = {
     search: "#query",
     page: "#page",
     label: ".subtitle",
+    alert: ".alert",
     view_more: ".btn.btn-view-more",
     view_mode: ".btn.btn-view-mode",
     dark_mode: ".btn.btn-dark-mode",
     _actions: ".btn[data-action]",
+    _recents: "a.recent",
 
     /**
      * Load elements GUI
@@ -67,6 +72,8 @@ const app = {
           page = app.GUI.page.value;
       
       if(!app.setSearch(song)) return
+      app.recents.add(song)
+      app.GUI.alert.style.display = "none"
       app.GUI.label.innerText = "Searching.."
       app.GUI.search.disabled = true
 
@@ -132,6 +139,59 @@ const app = {
     }
   },
 
+  /** Group to recents functions */
+  recents: {
+
+    /** 
+     * @var {Number} MAX_LENGTH Max length of recents list
+     */
+    MAX_LENGTH: 3,
+
+    /**
+     * Add song to recents list
+     * @param {string} song song search
+     */
+    add(song) {
+      let recents = localStorage.getItem('recents')
+      if (!recents.split(',').includes(song)) {
+        if (recents.split(',').length >= app.recents.MAX_LENGTH) {
+          let r = recents.split(',');r.pop()
+          localStorage.setItem('recents', r.join(','))
+          recents = r.join(',')
+        }
+
+        recents_count = recents.split(',').filter(r => r != "").length
+        localStorage.setItem('recents', song + (recents_count == 0 ? '' : ',') + recents)
+      }
+    },
+
+    /**
+     * Load recents fields
+     * @param {boolean} display display alert
+     */
+    load(display = false) {
+      if (display) app.GUI.alert.style.display = "block";
+      let recents = app.GUI.alert.querySelector(".recents"),
+          links = localStorage.getItem('recents').split(',').filter(r => r != "")
+          .map(r => `<a class="recent">${r}</a>`);
+      
+      recents.innerHTML = `Recents searchs: ${links == "" ? "Nothing" : links.join(', ')}`;
+      app.recents.update();
+    },
+
+    /**
+     * Update recents links
+     */
+    update() {
+      Array.from(document.querySelectorAll(app.GUI._recents)).map(link => {
+        link.addEventListener("click" , () => {
+          app.GUI.search.value = link.innerText;
+          app.actions.search(app.e);
+        })
+      })
+    }
+  },
+
   /**
    * trait search (anti-duplicate)
    * @param {string} song song search
@@ -139,13 +199,16 @@ const app = {
    */
   setSearch(song) {
     let page = app.GUI.page.value
+
     if (app.beforeSearch == song && page == app.beforePage) return false
-    if (song == "" || app.beforeSearch != song) {
+    if (app.beforeSearch != song) {
       app.GUI.label.innerText = "Find lyrics of your favorites songs";
       app.GUI.view_more.style.display = 'none';
       app.GUI.container.innerHTML = "";
       app.GUI.page.value = 1
+      app.recents.load(true)
     }
+
     if (song == "") return false
     return true
   },
@@ -175,6 +238,7 @@ const app = {
 
     app.GUI.load()
     app.storage.load()
+    app.recents.load()
     app.actions.load()
 
     app.beforeSearch = app.GUI.search.value;
