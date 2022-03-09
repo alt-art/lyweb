@@ -1,8 +1,37 @@
 const app = {
 
-  /**
-   * Interfaces components
-   */
+  /** @var {object} e fake PointerEvent */
+  e: {preventDefault: () => {}},
+
+  /** Default LocalStorage data */
+  storage: {
+    view_mode: "grid_mode",
+    dark_mode: 0,
+
+    /**
+     * Set default values to localStorage
+     */
+    setDefault() {
+      Object.entries(app.storage).forEach(([item, value]) => {
+        localStorage.getItem(item) == null
+        if (localStorage.getItem(item) == null)
+          localStorage.setItem(item, value)
+      })
+    },
+
+    /**
+     * Load localStorage
+     */
+    load() {
+      if (app.GUI.container.dataset.mode != localStorage.getItem('view_mode'))
+        app.actions.view_mode(app.e);
+
+      if (parseInt(localStorage.getItem('dark_mode')))
+        app.actions.dark_mode(app.e);
+    }
+  },
+
+  /** Interfaces components */
   GUI: {
     container: "#container",
     search: "#query",
@@ -11,8 +40,21 @@ const app = {
     view_more: ".btn.btn-view-more",
     view_mode: ".btn.btn-view-mode",
     dark_mode: ".btn.btn-dark-mode",
+    _actions: ".btn[data-action]",
+
+    /**
+     * Load elements GUI
+     */
+    load() {
+      Object.entries(app.GUI)
+        .forEach(([elem, query]) => {
+          if(!elem.startsWith('_') && typeof query == 'string')
+            app.GUI[elem] = document.querySelector(query);
+        })
+    }
   },
 
+  /** Event actions */
   actions: {
 
     /**
@@ -50,7 +92,7 @@ const app = {
     view_mode: e => {
       e.preventDefault();
       let mode = app.GUI.container.dataset.mode == "view_list" ? "grid_view": "view_list"
-      let icon = app.GUI.view_mode.querySelector("i")
+      let icon = app.GUI.view_mode.children[0]
       app.GUI.container.dataset.mode = mode
       icon.innerText = mode
 
@@ -77,8 +119,17 @@ const app = {
       app.GUI.dark_mode.classList.toggle('active')
       if (e instanceof PointerEvent)
         localStorage.setItem('dark_mode', parseInt(localStorage.getItem('dark_mode')) ? 0 : 1)
-    }
+    },
 
+    /**
+     * Load Actions
+     */
+    load() {
+      Array.from(document.querySelectorAll(app.GUI._actions))
+      .forEach(b => {
+        b.addEventListener("click", app.actions[b.dataset.action.replace('-', '_')])
+      })
+    }
   },
 
   /**
@@ -120,20 +171,14 @@ const app = {
    * Start Application
    */
   start() {
-    Object.entries(app.GUI)
-      .forEach(([elem, query]) => {
-        app.GUI[elem] = document.querySelector(query)
-      })
-    
-    Array.from(document.querySelectorAll(".btn[data-action]"))
-      .forEach(b => {
-        b.addEventListener("click", app.actions[b.dataset.action.replace('-', '_')])
-      })
-    
+    app.storage.setDefault()
+
+    app.GUI.load()
+    app.storage.load()
+    app.actions.load()
+
     app.beforeSearch = app.GUI.search.value;
     app.beforePage = app.GUI.page.value;
-    // fake pointerEvent
-    app.e = {preventDefault: () => {}}
   }
 };
 
