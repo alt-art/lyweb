@@ -1,5 +1,11 @@
 @import url(default.css);
 
+body.dark-mode {
+  --dark-text-color: 238, 238, 238;
+    background: var(--dark-background);
+    color: #eee;
+}
+
 input, .btn {
   font-size: 18px;  
 }
@@ -7,7 +13,7 @@ input, .btn {
 .btn {
   display: block;
   text-transform: uppercase;
-  border-radius: 3px;
+  border-radius: calc(var(--border-radius) - 40%);
   padding: 10px 15px;
   margin: 5px;
 }
@@ -38,7 +44,7 @@ input, .btn {
 
 .card .card-img {
   object-fit: cover;
-  border-radius: 5px;
+  border-radius: var(--border-radius);
 }
 
 .card:hover {
@@ -57,7 +63,7 @@ input, .btn {
 [data-mode="grid_view"] .card {
   margin: 5px;
   padding: 10px 5px;
-  border-radius: 10px;
+  border-radius: calc(var(--border-radius) * 2);
 }
 
 [data-mode="grid_view"] .card .card-body {
@@ -79,7 +85,7 @@ input, .btn {
   display: flex;
   padding: 10px;
   align-items: center;
-  border-radius: 5px;
+  border-radius: var(--border-radius);
 }
 
 [data-mode="view_list"] .card .card-body {

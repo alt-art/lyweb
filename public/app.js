@@ -10,6 +10,7 @@ const app = {
     label: ".subtitle",
     view_more: ".btn.btn-view-more",
     view_mode: ".btn.btn-view-mode",
+    dark_mode: ".btn.btn-dark-mode",
   },
 
   actions: {
@@ -64,6 +65,18 @@ const app = {
       app.GUI.page.value = parseInt(app.GUI.page.value) + 1;
       app.GUI.search.value = app.GUI.page.dataset.search;
       app.actions.search(app.e)
+    },
+
+    /**
+     * Enable/Disable Dark mode
+     * @param {PointerEvent} e event
+     */
+    dark_mode: e => {
+      e.preventDefault();
+      document.querySelector("body").classList.toggle('dark-mode')
+      app.GUI.dark_mode.classList.toggle('active')
+      if (e instanceof PointerEvent)
+        localStorage.setItem('dark_mode', parseInt(localStorage.getItem('dark_mode')) ? 0 : 1)
     }
 
   },

@@ -1,8 +1,15 @@
 :root {
+  /* application colors */
   --theme-color: #985F99;
   --accent-color: #D1CF47;
 
+  /* dark mode */
+  --dark-background: #212121;
+  --dark-text-color: 0, 0, 0;
+
+  /* configures */
   --card-width: 200px;
+  --border-radius: 5px;
 }
 
 ::-webkit-scrollbar {
@@ -80,11 +87,12 @@ a:focus {
 }
 
 input {
+  color: rgb(var(--dark-text-color));
   border: none;
   padding: 10px 15px;
   font-size: 16px;
   outline: none;
-  border-radius: 5px;
+  border-radius: var(--border-radius);
   width: 100%;
   margin: 10px 5px;
   background: rgba(0, 0, 0, .1);
@@ -145,6 +153,7 @@ form {
   font-size: 30px;
 }
 .subtitle {
+  color: rgb(var(--dark-text-color));
   font-size: 1.45rem;
   font-weight: 200;
   line-height: 2;
