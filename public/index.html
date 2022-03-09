@@ -28,19 +28,22 @@
               <button class="btn" type="submit" data-action="search">
                 <i class="material-icons">search</i>
               </button>
+              <button class="btn btn-view-mode" data-action="view-mode">
+                <i class="material-icons">grid_view</i>
+              </button>
             </form>
           </div>
         </div>
       </section>
 
-      <article id="container" class="card-deck">
+      <article id="container" class="card-deck" data-mode="grid_view">
         <!-- Card Deck -->
       </article>
 
       <article>
         <div class="content">
           <div class="content text-center">
-            <a class="btn btn-block view-more" data-action="view-more" style="display: none;">
+            <a class="btn btn-block btn-view-more" data-action="view-more" style="display: none;">
             <!-- View more '{search}' results ({page}) -->
             </a>
           </div>

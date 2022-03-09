@@ -27,9 +27,13 @@ input, .btn {
   color: #ffffff;
 }
 
-.card-deck {
+[data-mode="grid_view"] {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(var(--card-width), auto));
+}
+
+[data-mode="view_list"] {
+    display: block;
 }
 
 .card .card-img {
@@ -37,32 +41,54 @@ input, .btn {
   border-radius: 5px;
 }
 
-.card {
+.card:hover {
+  background: rgba(0, 0, 0, .2);
+  cursor: pointer;
+}
+
+.card .card-title {
+  font-size: 16px;
+}
+
+.card .card-text {
+  font-size: 14px;
+}
+
+[data-mode="grid_view"] .card {
   margin: 5px;
   padding: 10px 5px;
   border-radius: 10px;
 }
 
-.card .card-body {
+[data-mode="grid_view"] .card .card-body {
   padding: 5px;
   padding-bottom: 0;
 }
 
-.card, 
-.card .card-body {
+[data-mode="grid_view"] .card, 
+[data-mode="grid_view"] .card .card-body {
   text-align: center;
 }
 
-.card img {
-  object-fit: cover;
-  border-radius: 5px;
+[data-mode="grid_view"] .card .card-img {
   width: calc(var(--card-width) - 50px);
   height: calc(var(--card-width) - 50px);
 }
 
-.card:hover {
-  background: rgba(0, 0, 0, .2);
-  cursor: pointer;
+[data-mode="view_list"] .card {
+  display: flex;
+  padding: 10px;
+  align-items: center;
+  border-radius: 5px;
+}
+
+[data-mode="view_list"] .card .card-body {
+  margin: 0 10px;
+}
+
+[data-mode="view_list"] .card .card-img {
+  width: calc(var(--card-width) / 3);
+  height: calc(var(--card-width) / 3);
 }
 
 @media (max-width: 500px) {
@@ -73,7 +99,7 @@ input, .btn {
     font-size: 32px;
   }
 
-  .card .card-img {
+  [data-mode="grid_view"] .card .card-img {
     width: calc(var(--card-width));
     height: calc(var(--card-width));
   }

@@ -7,8 +7,9 @@ const app = {
     container: "#container",
     search: "#query",
     page: "#page",
-    view_more: '.view-more',
-    label: ".subtitle"
+    label: ".subtitle",
+    view_more: ".btn.btn-view-more",
+    view_mode: ".btn.btn-view-mode",
   },
 
   actions: {
@@ -39,6 +40,20 @@ const app = {
           app.GUI.view_more.innerText = `View more '${song}' results (${parseInt(app.GUI.page.value) + 1})`
           app.GUI.view_more.style.display = 'block';
         });
+    },
+
+    /**
+     * Change View Mode
+     * @param {PointerEvent} e event
+     */
+    view_mode: e => {
+      e.preventDefault();
+      let mode = app.GUI.container.dataset.mode == "view_list" ? "grid_view": "view_list"
+      let icon = app.GUI.view_mode.querySelector("i")
+      app.GUI.container.dataset.mode = mode
+      icon.innerText = mode
+
+      localStorage.setItem('view_mode', mode)
     },
 
     /**
@@ -79,7 +94,7 @@ const app = {
   createCard({id, title, songArt, artistName}) {
     return `<a href="./song?id=${id}">
       <div class="card">
-        <img src="${songArt}" alt="${title}">
+        <img class="card-img" src="${songArt}" alt="${title}">
         <div class="card-body">
           <h5 class="card-title">${title}</h5>
           <p class="card-text">${artistName}</p>
