@@ -41,6 +41,7 @@ const app = {
     page: "#page",
     label: ".subtitle",
     alert: ".alert",
+    title: ".alert .title",
     view_more: ".btn.btn-view-more",
     view_mode: ".btn.btn-view-mode",
     dark_mode: ".btn.btn-dark-mode",
@@ -84,11 +85,25 @@ const app = {
       fetch(`./api/search?q=${song}&page=${page}`)
         .then((response) => response.json())
         .then((data) => {
-          data.map(song => app.GUI.container.innerHTML += app.createCard(song))
           app.GUI.search.disabled = false
-          app.GUI.label.innerText = "Select a song to see lyrics";
-          app.GUI.view_more.innerText = `View more '${song}' results (${parseInt(app.GUI.page.value) + 1})`
-          app.GUI.view_more.style.display = 'block';
+
+          if (data.length) {
+            app.view.load(data)
+            app.GUI.label.innerText = "Select a song to see lyrics";
+            if (data.length >= 5) {
+              app.GUI.view_more.innerText = `View more '${song}' results (${parseInt(app.GUI.page.value) + 1})`
+              app.GUI.view_more.style.display = 'block';
+            }
+          } else {
+            if (app.GUI.page.value > 1) {
+              app.GUI.label.innerText = "Select a song to see lyrics";
+              app.GUI.view_more.style.display = 'none'
+              app.GUI.page.value -= 1
+            } else {
+              app.view.reset()
+              app.GUI.title.innerText = `Nothing found for: ${song}`
+            }
+          }
         });
     },
 
@@ -137,6 +152,50 @@ const app = {
         b.addEventListener("click", app.actions[b.dataset.action.replace('-', '_')])
       })
     }
+  },
+
+  /** View functions */
+  view: {
+
+    /**
+     * create card element
+     * @param {object} song song data
+     * @returns string
+     */
+    createCard({id, title, songArt, artistName}) {
+      return `<a href="./song?id=${id}">
+        <div class="card">
+          <img class="card-img" src="${songArt}" alt="${title}">
+          <div class="card-body">
+            <h5 class="card-title">${title}</h5>
+            <p class="card-text">${artistName}</p>
+          </div>
+        </div>
+      </a>`;
+    },
+
+    /**
+     * Load data song cards
+     * @param {Array} data songs
+     */
+    load(data) {
+      data.forEach(song => {
+        app.GUI.container.innerHTML += app.view.createCard(song)
+      })
+    },
+
+    /**
+     * Reset view
+     */
+    reset() {
+      app.GUI.label.innerText = "Find lyrics of your favorites songs";
+      app.GUI.title.innerText = "You don't search anything yet"
+      app.GUI.view_more.style.display = 'none';
+      app.GUI.container.innerHTML = "";
+      app.GUI.page.value = 1;
+      app.recents.load(true);
+    },
+
   },
 
   /** Group to recents functions */
@@ -201,33 +260,9 @@ const app = {
     let page = app.GUI.page.value
 
     if (app.beforeSearch == song && page == app.beforePage) return false
-    if (app.beforeSearch != song) {
-      app.GUI.label.innerText = "Find lyrics of your favorites songs";
-      app.GUI.view_more.style.display = 'none';
-      app.GUI.container.innerHTML = "";
-      app.GUI.page.value = 1
-      app.recents.load(true)
-    }
-
+    if (app.beforeSearch != song) app.view.reset()
     if (song == "") return false
     return true
-  },
-
-  /**
-   * create card element
-   * @param {object} song song data
-   * @returns string
-   */
-  createCard({id, title, songArt, artistName}) {
-    return `<a href="./song?id=${id}">
-      <div class="card">
-        <img class="card-img" src="${songArt}" alt="${title}">
-        <div class="card-body">
-          <h5 class="card-title">${title}</h5>
-          <p class="card-text">${artistName}</p>
-        </div>
-      </div>
-    </a>`;
   },
 
   /**
