@@ -1,25 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-      crossorigin="anonymous"
-    />
-    <script src="script.js" defer></script>
-    <title>Lyweb</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Pedro H. M. <pedromendescraft@gmail.com>">
+  <meta name="keywords" content="lyric-song, song, lyric, música, letras">
+  <meta name="keywords" content="constelações, orion, órion, estrelas">
+  <meta name="theme-color" content="#985F99">
+  <meta name="application-name" content="Lyweb">
+  <title>Lyweb</title>
+  <link rel="shortcut icon" href="../icon.jpg" type="image/x-icon">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="../index.css">
 </head>
 <body>
-    <nav class="d-flex flex-row justify-content-center navbar navbar-light bg-light">
-        <a class="navbar-brand" href="../">Lyweb</a>
+  <header id="top">
+    <nav class="nav">
+      <div>
+        <a href="../" class="btn">
+          <i class="material-icons">arrow_back</i>
+        </a>
+        <span class="brand">Lyweb</span>
+      </div>
+
+      <button class="btn btn-dark-mode" data-action="dark-mode">
+        <i class="material-icons">dark_mode</i>
+      </button>
     </nav>
-    <main class="container">
-        <section class="lyrics">
-        </section>
-    </main>
+  </header>
+
+  <main>
+    <article id="container" data-mode="view-mode">
+      <div class="content">
+        <div class="content text-center">
+            <div class="lyrics"></div>
+          </div>
+      </div>
+    </article>
+
+    <a href="#top" class="btn btn-block btn-fit text-center" style="display: none;">Back to Top</a>
+  </main>
+
+  <script src="script.js"></script>
+  <script src="../app.js"></script>
 </body>
 </html>
