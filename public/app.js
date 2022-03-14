@@ -30,10 +30,10 @@ const app = {
      */
     load() {
       if (app.GUI.container.dataset.mode != localStorage.getItem('view_mode'))
-        app.actions.view_mode(app.e);
+        if (app.GUI.view_mode) app.actions.view_mode(app.e);
 
       if (parseInt(localStorage.getItem('dark_mode')))
-        app.actions.dark_mode(app.e);
+        if (app.GUI.dark_mode) app.actions.dark_mode(app.e);
     }
   },
 
@@ -231,6 +231,7 @@ const app = {
      * @param {boolean} display display alert
      */
     load(display = false) {
+      if (!app.GUI.alert) return
       if (display) app.GUI.alert.style.display = "block";
       let recents = app.GUI.alert.querySelector(".recents"),
           links = localStorage.getItem('recents').split(',').filter(r => r != "")
@@ -278,6 +279,7 @@ const app = {
     app.recents.load()
     app.actions.load()
 
+    if (!app.GUI.search) return
     app.beforeSearch = app.GUI.search.value;
     app.beforePage = app.GUI.page.value;
   }

@@ -1,13 +1,38 @@
 @import url(default.css);
 
+body {
+  min-height: 100vh;
+}
+
 body.dark-mode {
   --dark-text-color: 238, 238, 238;
-    background: var(--dark-background);
-    color: #eee;
+  --background-color: var(--dark-background);
+  background: var(--dark-background);
+  color: #eee;
+}
+
+header {
+  width: 100%;
+}
+
+.nav {
+  justify-content: space-between;
+  padding: 0 10px;
+  background: rgba(var(--nav-background), .2);
+}
+.nav,
+.nav > div {
+  display: flex;
+  align-items: center;
+}
+
+.nav span.brand {
+  font-size: 18px;
+  margin: 0 5px;
 }
 
 input, .btn {
-  font-size: 18px;  
+  font-size: 18px;
 }
 
 .alert {
@@ -24,6 +49,10 @@ input, .btn {
   padding: 10px 15px;
   margin: 5px;
 }
+.btn:hover {
+  background: rgba(0, 0, 0, .2);
+  border-radius: var(--border-radius);
+}
 .btn.active {
   color: var(--theme-color);
 }
@@ -39,6 +68,9 @@ input, .btn {
   background-color: var(--theme-color);
   color: #ffffff;
 }
+.btn.btn-fit {
+  margin: 0;
+}
 
 [data-mode="grid_view"] {
   display: grid;
@@ -46,7 +78,7 @@ input, .btn {
 }
 
 [data-mode="view_list"] {
-    display: block;
+  display: block;
 }
 
 .card .card-img {
@@ -95,6 +127,14 @@ input, .btn {
   border-radius: var(--border-radius);
 }
 
+[data-mode="view_list"] .card .card-title {
+  font-size: 18px;
+}
+
+[data-mode="view_list"] .card .card-text {
+  font-size: 16px;
+}
+
 [data-mode="view_list"] .card .card-body {
   margin: 0 10px;
 }
@@ -102,6 +142,18 @@ input, .btn {
 [data-mode="view_list"] .card .card-img {
   width: calc(var(--card-width) / 3);
   height: calc(var(--card-width) / 3);
+}
+
+.lyrics p,
+.lyrics div {
+  padding: 5px;
+}
+.lyrics div {
+  padding-top: 20px;
+}
+.lyrics p {
+  padding: 5px;
+  font-size: 20px;
 }
 
 @media (max-width: 500px) {
@@ -116,6 +168,10 @@ input, .btn {
     width: calc(var(--card-width));
     height: calc(var(--card-width));
   }
+
+  .lyrics p {
+    font-size: 16px;
+  }
 }
 
 @media (max-width: 300px) {
@@ -125,5 +181,9 @@ input, .btn {
 
   form {
     margin: 0;
+  }
+
+  .lyrics p {
+    font-size: 14px;
   }
 }
