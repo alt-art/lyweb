@@ -143,8 +143,10 @@ const app = {
       e.preventDefault();
       document.querySelector("body").classList.toggle('dark-mode')
       app.GUI.dark_mode.classList.toggle('active')
-      if (e instanceof PointerEvent)
-        localStorage.setItem('dark_mode', parseInt(localStorage.getItem('dark_mode')) ? 0 : 1)
+      if (e instanceof Event) {
+        let newValue = parseInt(localStorage.getItem('dark_mode')) ? 0 : 1
+        localStorage.setItem('dark_mode', newValue)
+      }
     },
 
     /**
