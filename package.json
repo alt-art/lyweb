@@ -5,7 +5,7 @@
   "main": "main.ts",
   "scripts": {
     "dev": "nodemon",
-    "start": "npm run build && node ./dist/main.js",
+    "start": "node ./dist/main.js",
     "build": "tsc --build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
