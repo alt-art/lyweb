@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express, { Application } from 'express';
 import axios from 'axios';
+import { createClient } from 'redis';
 import path from 'path';
 import console from 'console';
 
@@ -10,7 +11,16 @@ const port: string = process.env.PORT || '3000';
 
 const app: Application = express();
 
-app.use(express.static(path.resolve(__dirname, '../public')));
+const redisClient = createClient({
+    url: process.env.REDIS_URL,
+    socket: { tls: true, rejectUnauthorized: false },
+});
+
+redisClient.on('error', (err) => {
+    console.log('Redis error', err);
+});
+
+app.use(express.static(path.resolve('./public')));
 app.use(express.json());
 
 const geniusAPI = axios.create({
@@ -40,25 +50,32 @@ app.get('/api/search', async (req, res) => {
         });
         res.json(songs);
     } catch (error) {
-        const status = error.response.status || 500;
-        res.status(status).json({ ...error.response.data });
+        res.status(500).json({ ...error.response.data });
     }
 });
 
 app.get('/api/lyrics/:id', async (req, res) => {
+    const { id } = req.params;
     try {
-        const { id } = req.params;
+        const cachedLyrics = await redisClient.get(`lyrics:${id}`);
+        if (cachedLyrics) {
+            res.json({ plain: cachedLyrics });
+            return;
+        }
         const { data } = await geniusAPI.get(`/songs/${id}?text_format=plain`);
         const {
             song: { lyrics },
         } = data.response;
+        await redisClient.setEx(`lyrics:${id}`, 60 * 60 * 48, lyrics.plain);
         res.json(lyrics);
     } catch (error) {
-        const status = error.response.status || 500;
-        res.status(status).json({ ...error.response.data });
+        res.status(500).json({ ...error.response.data });
     }
 });
 
-app.listen(port, () => {
+app.listen(port, async () => {
+    console.time('Redis connected');
+    await redisClient.connect();
+    console.timeEnd('Redis connected');
     console.log(`Server listening on port ${port}`);
 });

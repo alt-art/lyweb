@@ -8,6 +8,6 @@
         "sourceMap": true,
         "esModuleInterop": true,
         "outDir": "./dist",
-        "target": "ES5"
+        "target": "ES2015"
     }
 }
