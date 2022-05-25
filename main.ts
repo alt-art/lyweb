@@ -12,7 +12,7 @@ const port: string = process.env.PORT || '3000';
 const app: Application = express();
 
 const redisClient = createClient({
-    url: process.env.REDIS_URL,
+    url: process.env.REDIS_TLS_URL,
     socket: { tls: true, rejectUnauthorized: false },
 });
 
