@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express, { Application } from 'express';
+import helmet from 'helmet';
 import axios from 'axios';
 import { createClient } from 'redis';
 import path from 'path';
@@ -20,6 +21,7 @@ redisClient.on('error', (err) => {
     console.log('Redis error', err);
 });
 
+app.use(helmet());
 app.use(express.static(path.resolve('./public')));
 app.use(express.json());
 
