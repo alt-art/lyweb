@@ -26,11 +26,11 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         'img-src': ["'self'", '*.genius.com', '*.rapgenius.com'],
-        'script-src': ["'self'", "'unsafe-inline'"],
+        'script-src': ["'self'", "'unsafe-inline'", '*.cloudflareinsights.com'],
       },
     },
     crossOriginResourcePolicy: {
-      policy: 'same-origin',
+      policy: 'cross-origin',
     },
     crossOriginEmbedderPolicy: false,
   }),
