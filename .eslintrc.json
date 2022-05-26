@@ -22,7 +22,6 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "indent": ["error", 4],
         "import/extensions": "off"
     },
     "ignorePatterns": ["**/dist/*.js", "**/public/*.js"]
