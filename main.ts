@@ -25,7 +25,8 @@ app.use(
     helmet({
         contentSecurityPolicy: {
             directives: {
-                'img-src': ["'self'", '*.genius.com'],
+                'img-src': ["'self'", '*.genius.com', '*.rapgenius.com'],
+                'script-src': ["'self'", "'unsafe-inline'"],
             },
         },
         crossOriginResourcePolicy: {
