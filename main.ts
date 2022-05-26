@@ -21,21 +21,8 @@ redisClient.on('error', (err) => {
   console.log('Redis error', err);
 });
 
-app.use(
-  helmet({
-    contentSecurityPolicy: {
-      directives: {
-        'img-src': ["'self'", '*.genius.com', '*.rapgenius.com'],
-        'script-src': ["'self'", "'unsafe-inline'", '*.cloudflareinsights.com'],
-      },
-    },
-    crossOriginResourcePolicy: {
-      policy: 'cross-origin',
-    },
-    crossOriginEmbedderPolicy: false,
-  }),
-);
 app.use(express.static(path.resolve('./public')));
+app.use(helmet());
 app.use(express.json());
 
 const geniusAPI = axios.create({
