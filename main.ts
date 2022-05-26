@@ -21,7 +21,19 @@ redisClient.on('error', (err) => {
     console.log('Redis error', err);
 });
 
-app.use(helmet());
+app.use(
+    helmet({
+        contentSecurityPolicy: {
+            directives: {
+                'img-src': ["'self'", '*.genius.com'],
+            },
+        },
+        crossOriginResourcePolicy: {
+            policy: 'same-origin',
+        },
+        crossOriginEmbedderPolicy: false,
+    }),
+);
 app.use(express.static(path.resolve('./public')));
 app.use(express.json());
 
