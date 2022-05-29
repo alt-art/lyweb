@@ -14,7 +14,7 @@ const app: Application = express();
 
 const redisClient = createClient({
   url: process.env.REDIS_TLS_URL,
-  socket: { tls: true, rejectUnauthorized: false },
+  socket: { tls: process.env.TLS !== 'false', rejectUnauthorized: false },
 });
 
 redisClient.on('error', (err) => {
