@@ -1,32 +1,47 @@
-const lyrics = document.querySelector('.lyrics'),
-      backTop = document.querySelector('.btn.btn-block'),
-      url = new URL(window.location.href),
-      id = url.searchParams.get('id');
+const lyrics = document.querySelector('.lyrics');
+const backTop = document.querySelector('.btn.btn-block');
+const url = new URL(window.location.href);
+const id = url.searchParams.get('id');
 
-
-fetch(`/api/lyrics/${id}`).then(res => res.json()).then(song => {
-  let text = song.plain.trim(),
-      chorus = false, intro = false;
-
-  if (text != '') {
-    text.split('[').filter(i => i != "").map(part => {
-      let [ verse, lines ] = part.split(']')
-      if (lines == undefined) [ lines, verse ] = [ verse, '' ]
-      else verse = verse.toLowerCase();
-      intro = (verse.startsWith('intro')) ? true : false
-      chorus = (verse.startsWith('refrão') || verse.startsWith('chorus')) ? true : false
-
-      lyrics.innerHTML += `<div class="verse ${chorus ? 'chorus-verse':''}">
-        <h4 class="section">${verse.toUpperCase()}</h4>
-        ${lines.split('\n').map(line => {
-          space = line.trim() == '' ? true : false
-          return (`<p class="${(space)? 'text-space':''} ${chorus ? 'text-bold text-primary' : intro ? 'text-transparent':''}">${line}</p>`);
-        }).join('\n')}
-      </div>`
-
-      backTop.style.display = 'block'
+fetch(`/api/lyrics/${id}`)
+  .then((res) => res.json())
+  .then((song) => {
+    const text = song.plain.trim();
+    if (text === '') {
+      lyrics.innerHTML = '<p>This song has empty lyric</p>';
+      return;
+    }
+    text
+      .split('[')
+      .filter((i) => i !== '')
+      .forEach((part) => {
+        let [verse, lines] = part.split(']');
+        if (lines === undefined) [lines, verse] = [verse, ''];
+        verse = verse.toLowerCase();
+        const intro = verse.startsWith('intro');
+        const chorus = verse.startsWith('refrão') || verse.startsWith('chorus');
+        lyrics.innerHTML += `
+<div class="verse ${chorus ? 'chorus-verse' : ''}">
+  <h4 class="section">${verse.toUpperCase()}</h4>
+  ${lines
+    .split('\n')
+    .map((line) => {
+      const space = line.trim() === '';
+      if (chorus) {
+        return `<p class="${
+          space ? 'text-space' : ''
+        } text-bold text-primary">${line}</p>`;
+      }
+      if (intro) {
+        return `<p class="${space ? 'text-space' : ''} text-transparent">${line}</p>`;
+      }
+      return `<p class="${space ? 'text-space' : ''}">${line}</p>`;
     })
-  } else {
-    lyrics.innerHTML = `<p>This song has empty lyric</p>`;
-  }
-});
+    .join('')}
+</div>`;
+        backTop.style.display = 'block';
+      });
+  })
+  .catch(() => {
+    lyrics.innerHTML = '<p>No lyrics found</p>';
+  });
