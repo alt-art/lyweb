@@ -5,6 +5,7 @@ import axios from 'axios';
 import { createClient } from 'redis';
 import path from 'path';
 import console from 'console';
+import { compileFile } from 'pug';
 
 const authToken = process.env.GENIUS_TOKEN;
 
@@ -22,7 +23,17 @@ redisClient.on('error', (err) => {
 });
 
 app.use(express.static(path.resolve('./public')));
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+      scriptSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", 'data:', 'https://images.genius.com'],
+      fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+    },
+  },
+}));
 app.use(express.json());
 
 const geniusAPI = axios.create({
@@ -56,23 +67,56 @@ app.get('/api/search', async (req, res) => {
   }
 });
 
+async function getLyrics(id: string) {
+  const cachedLyrics = await redisClient.get(`lyrics:${id}`);
+  if (cachedLyrics) {
+    try {
+      return JSON.parse(cachedLyrics);
+    } catch (error) {
+      redisClient.del(`lyrics:${id}`);
+    }
+  }
+  const { data } = await geniusAPI.get(`/songs/${id}?text_format=plain`);
+  console.log(data);
+  const {
+    song: {
+      lyrics,
+      artist_names: artistNames,
+      song_art_image_thumbnail_url: songArt,
+      title,
+    },
+  } = data.response;
+  const lyricsData = {
+    plain: lyrics.plain,
+    artists: artistNames,
+    songArt,
+    title,
+  };
+  console.log(lyricsData);
+  await redisClient.setEx(
+    `lyrics:${id}`,
+    60 * 60 * 48,
+    JSON.stringify(lyricsData),
+  );
+  return lyricsData;
+}
+
 app.get('/api/lyrics/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    const cachedLyrics = await redisClient.get(`lyrics:${id}`);
-    if (cachedLyrics) {
-      res.json({ plain: cachedLyrics });
-      return;
-    }
-    const { data } = await geniusAPI.get(`/songs/${id}?text_format=plain`);
-    const {
-      song: { lyrics },
-    } = data.response;
-    await redisClient.setEx(`lyrics:${id}`, 60 * 60 * 48, lyrics.plain);
-    res.json(lyrics);
+    const lyricsData = await getLyrics(id);
+    res.json(lyricsData);
   } catch (error) {
-    res.status(500).json({ ...error.response.data });
+    console.log(error);
+    res.status(500).json(error);
   }
+});
+
+app.get('/song/:id', async (req, res) => {
+  const { id } = req.params;
+  const songTemplate = compileFile(path.resolve('./views/song.pug'));
+  const lyricsData = await getLyrics(id);
+  res.send(songTemplate({ song: { ...lyricsData } }));
 });
 
 app.listen(port, async () => {

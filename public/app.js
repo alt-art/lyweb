@@ -169,7 +169,7 @@ const app = {
      * @returns string
      */
     createCard({id, title, songArt, artistName}) {
-      return `<a href="./song?id=${id}">
+      return `<a href="./song/${id}">
         <div class="card">
           <img class="card-img" src="${songArt}" alt="${artistName} - ${title}" onerror="this.src = '${app.DEFAULT_IMG}'">
           <div class="card-body">
@@ -201,7 +201,6 @@ const app = {
       app.GUI.page.value = 1;
       app.recents.load(true);
     },
-
   },
 
   /** Group to recents functions */

@@ -156,6 +156,29 @@ input, .btn {
   font-size: 20px;
 }
 
+.song {
+  margin: 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background-color: rgba(var(--nav-background), .2);
+  border-radius: var(--border-radius);
+}
+
+.song img {
+  max-width: 100px;
+  border-radius: var(--border-radius);
+}
+
+.song .artists {
+  font-size: 18px;
+}
+
+.song .title {
+  font-size: 32px;
+  color: var(--theme-color);
+}
+
 @media (max-width: 500px) {
   form {
       margin: 5px 0;

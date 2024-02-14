@@ -1,0 +1,46 @@
+doctype html
+head
+    meta(charset='UTF-8')
+    meta(http-equiv='X-UA-Compatible' content='IE=edge')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    meta(name='author' content='Pedro H. M. <pedromendescraft@gmail.com>')
+    meta(name='keywords' content='lyric-song, song, lyric, música, letras, ' + song.title + ', ' + song.artists)
+    meta(name='theme-color' content='#985F99')
+    meta(name='application-name' content='Lyweb')
+    title Lyweb - #{song.title}
+    link(rel='shortcut icon' href='../icon.jpg' type='image/x-icon')
+    link(rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Material+Icons')
+    link(rel='stylesheet' href='../index.css')
+body
+    header#top
+        nav.nav
+            div
+                a.btn(href='../')
+                    i.material-icons arrow_back
+                span.brand Lyweb
+            button.btn.btn-dark-mode(data-action='dark-mode')
+                i.material-icons dark_mode
+    main
+        article#container(data-mode='view-mode')
+            .content
+                div.song
+                    img(src=song.songArt alt='Lyweb')
+                    div
+                        h1.title #{song.title}
+                        h2.artists #{song.artists}
+                .content.text-center
+                    .lyrics
+                        each x in song.plain.split('[').filter(x => x.trim() !== '')
+                            -
+                                let [verse, lines] = x.split(']');
+                                if (lines === undefined) [lines, verse] = [verse, ''];
+                                verse = verse.trim().toLowerCase();
+                                let isIntro = verse.startsWith('intro');
+                                let isChorus = verse.startsWith('refrão') || verse.startsWith('chorus');
+                            div.verse(class=isChorus && 'chorus-verse')
+                                h3.section #{verse.toUpperCase()}
+                                each line in lines.split('\n')
+                                    -
+                                        let isSpace = line.trim() === ''
+                                    p(class=isSpace && 'text-space' class=isIntro && 'text-transparent' class=isChorus && 'text-bold text-primary')= line
+    script(async src="../app.js")
