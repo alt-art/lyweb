@@ -22,6 +22,19 @@ redisClient.on('error', (err) => {
   console.log('Redis error', err);
 });
 
+app.use((req, _res, next) => {
+  const log: string[] = [];
+  log.push(req.method);
+  log.push(req.path);
+  log.push(req.ip);
+  const headers = Object.entries(req.headers);
+  headers.forEach(([key, value]) => {
+    log.push(`${key}: ${value}`);
+  });
+  console.log(log.join(' | '));
+  next();
+});
+
 app.use(express.static(path.resolve('./public')));
 app.use(helmet({
   contentSecurityPolicy: {
