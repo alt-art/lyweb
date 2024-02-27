@@ -77,7 +77,6 @@ async function getLyrics(id: string) {
     }
   }
   const { data } = await geniusAPI.get(`/songs/${id}?text_format=plain`);
-  console.log(data);
   const {
     song: {
       lyrics,
@@ -92,7 +91,6 @@ async function getLyrics(id: string) {
     songArt,
     title,
   };
-  console.log(lyricsData);
   await redisClient.setEx(
     `lyrics:${id}`,
     60 * 60 * 48,
