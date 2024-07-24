@@ -21,24 +21,24 @@
   },
   "homepage": "https://github.com/alt-art/lyweb#readme",
   "dependencies": {
-    "axios": "^1.6.7",
-    "dotenv": "^16.4.4",
+    "axios": "^1.7.2",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "helmet": "^7.1.0",
-    "pug": "^3.0.2",
-    "redis": "^4.6.13"
+    "pug": "^3.0.3",
+    "redis": "^4.6.15"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
-    "@types/node": "^20.11.17",
+    "@types/node": "^20.14.12",
     "@types/pug": "^2.0.10",
-    "@typescript-eslint/eslint-plugin": "^7.0.1",
-    "@typescript-eslint/parser": "^7.0.1",
-    "eslint": "^8.56.0",
+    "@typescript-eslint/eslint-plugin": "^7.17.0",
+    "@typescript-eslint/parser": "^7.17.0",
+    "eslint": "^8.57.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.29.1",
-    "nodemon": "^3.0.3",
+    "nodemon": "^3.1.4",
     "ts-node": "^10.9.2",
-    "typescript": "^5.3.3"
+    "typescript": "^5.5.4"
   }
 }

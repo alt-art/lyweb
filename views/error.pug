@@ -1,0 +1,26 @@
+doctype html
+head
+    meta(charset='UTF-8')
+    meta(http-equiv='X-UA-Compatible' content='IE=edge')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    meta(name='author' content='Pedro H. M. <pedromendescraft@gmail.com>')
+    meta(name='theme-color' content='#985F99')
+    meta(name='application-name' content='Lyweb')
+    title #{data.status} - #{data.message} | Lyweb
+    link(rel='shortcut icon' href='../icon.jpg' type='image/x-icon')
+    link(rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Material+Icons')
+    link(rel='stylesheet' href='../index.css')
+body
+    header#top
+        nav.nav
+            div
+                a.btn(href='../')
+                    i.material-icons arrow_back
+                span.brand Lyweb
+            button.btn.btn-dark-mode(data-action='dark-mode')
+                i.material-icons dark_mode
+    main
+        article#container(data-mode='view-mode').text-center
+                h1.headline-1.text-primary #{data.status}
+                h2.subtitle #{data.message.toUpperCase()}
+    script(async src="../app.js")

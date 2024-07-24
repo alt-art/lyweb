@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import express, { Application } from 'express';
 import helmet from 'helmet';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { createClient } from 'redis';
 import path from 'path';
 import console from 'console';
@@ -27,6 +27,7 @@ app.use((req, _res, next) => {
   log.push(req.method);
   log.push(req.path);
   log.push(req.ip);
+  log.push(req.socket.remoteAddress);
   const headers = Object.entries(req.headers);
   headers.forEach(([key, value]) => {
     log.push(`${key}: ${value}`);
@@ -36,17 +37,19 @@ app.use((req, _res, next) => {
 });
 
 app.use(express.static(path.resolve('./public')));
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
-      scriptSrc: ["'self'", "'unsafe-inline'"],
-      imgSrc: ["'self'", 'data:', 'https://images.genius.com'],
-      fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", 'data:', 'https://images.genius.com'],
+        fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+      },
     },
-  },
-}));
+  }),
+);
 app.use(express.json());
 
 const geniusAPI = axios.create({
@@ -124,10 +127,45 @@ app.get('/api/lyrics/:id', async (req, res) => {
 });
 
 app.get('/song/:id', async (req, res) => {
-  const { id } = req.params;
-  const songTemplate = compileFile(path.resolve('./views/song.pug'));
-  const lyricsData = await getLyrics(id);
-  res.send(songTemplate({ song: { ...lyricsData } }));
+  try {
+    const { id } = req.params;
+    const songTemplate = compileFile(path.resolve('./views/song.pug'));
+    const lyricsData = await getLyrics(id);
+    res.send(songTemplate({ song: { ...lyricsData } }));
+  } catch (error) {
+    const errorTemplate = compileFile(path.resolve('./views/error.pug'));
+    if (error instanceof AxiosError) {
+      res.status(error.response.status || 500).send(
+        errorTemplate({
+          data: {
+            status: error.response.status || 500,
+            message: error.response.statusText || 'Internal Server Error',
+          },
+        }),
+      );
+    } else {
+      res.status(500).send(
+        errorTemplate({
+          data: {
+            status: 500,
+            message: 'Internal Server Error',
+          },
+        }),
+      );
+    }
+  }
+});
+
+app.use((_req, res) => {
+  const errorTemplate = compileFile(path.resolve('./views/error.pug'));
+  res.status(404).send(
+    errorTemplate({
+      data: {
+        status: 404,
+        message: 'Not Found',
+      },
+    }),
+  );
 });
 
 app.listen(port, async () => {
