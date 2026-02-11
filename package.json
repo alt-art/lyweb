@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/alt-art/lyweb#readme",
   "dependencies": {
-    "axios": "^1.7.2",
+    "axios": "^1.13.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "helmet": "^7.1.0",
